@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from './pubic.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_SECRET } from './auth.jwt.secret';
+import { ApiFailedException } from '@/exceptions/api-failed.exception';
+import { ErrorEnum } from '@/constants/errorx';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -27,7 +29,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException('用户未登录');
+      throw new ApiFailedException(ErrorEnum.CODE_1026);
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
@@ -35,7 +37,7 @@ export class AuthGuard implements CanActivate {
       });
       request['user'] = payload;
     } catch (error) {
-      throw new UnauthorizedException('用户未登录');
+      throw new ApiFailedException(ErrorEnum.CODE_1026);
     }
     return true;
   }

@@ -14,12 +14,12 @@ export class UserDto {
   username: string;
   @PasswordValidator()
   password: string;
-  roles: string;
+  roles: string[];
   nickname: string;
   sex: number;
   title: string;
   avatar: string;
-  tags: string;
+  tags: string[];
   @IsEmail({}, { message: '邮箱格式无效' })
   email: string;
   @IsPhoneNumber()
@@ -46,16 +46,24 @@ export class UpdateUserInfoDto {
   address: string;
 }
 
-export class UpdateUserPasswordDto {
-  id: number;
-  password: string;
+export class UpdatePasswordDto {
+  @IsNotEmpty({ message: '旧密码不能为空' })
+  oldPassword: string;
+  @IsNotEmpty({ message: '新密码不能为空' })
+  @PasswordValidator()
+  newPassword: string;
+}
+
+export class UpdateAvatarDto {
+  @IsNotEmpty({ message: '图片地址不能为空' })
+  avatar: string;
 }
 
 //组合装饰器
 function PasswordValidator() {
   return applyDecorators(
-    IsString({ message: 'Password must be a string' }),
-    MinLength(6, { message: 'Password must be at least 6 characters long' }),
-    MaxLength(20, { message: 'Password must be at most 20 characters long' }),
+    IsString({ message: '密码必须是字符串' }),
+    MinLength(6, { message: '密码长度至少为6位' }),
+    MaxLength(20, { message: '密码长度最多为20位' }),
   );
 }

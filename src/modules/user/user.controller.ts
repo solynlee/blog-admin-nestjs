@@ -12,7 +12,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { wrapperResponse } from 'src/utils';
-import { UpdateUserInfoDto } from './user.dto';
+import {
+  UpdateAvatarDto,
+  UpdatePasswordDto,
+  UpdateUserInfoDto,
+} from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,7 +40,6 @@ export class UserController {
   }
   @Put()
   updateUser(
-    @Req() req: Request,
     @Query('id', ParseIntPipe) id: number,
     @Body() Body: UpdateUserInfoDto,
   ) {
@@ -45,5 +48,21 @@ export class UserController {
   @Delete(':id')
   removeUser(@Query('id', ParseIntPipe) id: number) {
     return this.userService.removeUser(id);
+  }
+  @Put('password')
+  updatePassword(
+    @Req() req: Request,
+    @Query('id', ParseIntPipe) id: number,
+    @Body() Body: UpdatePasswordDto,
+  ) {
+    return this.userService.updatePassword(id, Body);
+  }
+
+  @Put('avatar')
+  updateAvatar(
+    @Query('id', ParseIntPipe) id: number,
+    @Body() Body: UpdateAvatarDto,
+  ) {
+    return this.userService.updateAvatar(id, Body);
   }
 }

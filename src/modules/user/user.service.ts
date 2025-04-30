@@ -1,9 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  FindOptionsWhere,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
-import { UserDto } from './user.dto';
+import { UpdateAvatarDto, UpdatePasswordDto, UserDto } from './user.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { ApiFailedException } from '@/exceptions/api-failed.exception';
+import { ErrorEnum } from '@/constants/errorx';
+import { isEmpty } from 'lodash';
+import * as md5 from 'md5';
 
 @Injectable()
 export class UserService {
@@ -40,13 +49,12 @@ export class UserService {
   }
 
   private async findUserBy(
-    condition: Partial<UserEntity>,
+    condition: FindOptionsWhere<UserEntity>,
   ): Promise<UserEntity | null> {
     const user = await this.userRepository.findOneBy(condition);
     if (!user) {
-      throw new NotFoundException('用户不存在');
+      throw new ApiFailedException(ErrorEnum.CODE_1026);
     }
-    user.roles = JSON.parse(user.roles);
     return user;
   }
 
@@ -60,6 +68,25 @@ export class UserService {
         }
       });
     });
+  }
+
+  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
+    const user = await this.findUserBy({ id });
+    if (isEmpty(user)) {
+      throw new ApiFailedException(ErrorEnum.CODE_1022);
+    }
+    const md5OldPassword = md5(updatePasswordDto.oldPassword).toUpperCase();
+    if (user.password !== md5OldPassword) {
+      throw new ApiFailedException(ErrorEnum.CODE_1022);
+    }
+    const md5NewPassword = md5(updatePasswordDto.newPassword).toUpperCase();
+    user.password = md5NewPassword;
+    console.log(user);
+    return this.userRepository.update(id, user);
+  }
+
+  updateAvatar(id: number, updateAvatarDto: UpdateAvatarDto) {
+    return this.userRepository.update(id, updateAvatarDto);
   }
   // getUserInfo(req: Request): Promise<UserEntity | null> {
   //   // return this.userRepository.findOneBy({ username: req.user.username });

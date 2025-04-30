@@ -12,8 +12,8 @@ export class UserEntity {
   password: string;
   @Column()
   avatar: string;
-  @Column()
-  roles: string;
+  @Column({ type: 'simple-array' })
+  roles: string[];
   @Column()
   nickname: string;
   @Column()
@@ -28,8 +28,8 @@ export class UserEntity {
   address: string;
   @Column()
   des: string;
-  @Column()
-  tags: string;
+  @Column({ type: 'simple-array' })
+  tags: string[];
   @Column()
   sex: number;
 }

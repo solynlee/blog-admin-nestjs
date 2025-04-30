@@ -19,6 +19,7 @@ import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { setupSwagger } from './setup-swagger';
+import { join } from 'path';
 
 const dir = process.cwd();
 const httpsOptions = {

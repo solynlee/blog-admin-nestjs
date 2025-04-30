@@ -10,7 +10,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MenuModule } from './modules/menu/menu.module';
 import { SharedModule } from './shared/shared.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { UploadModule } from './modules/upload/upload.module';
 import configuration from './configuration';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -41,6 +44,11 @@ import configuration from './configuration';
     AuthModule,
     BookModule,
     MenuModule,
+    UploadModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'resources'),
+      serveRoot: '/resources',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
