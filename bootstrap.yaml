@@ -31,7 +31,7 @@ db:
   port: 3306
   username: song
   password: Song1990926.
-  database: blog-admin
+  database: blog_admin
   logging: true
 
 swagger:
