@@ -34,6 +34,7 @@ async function bootstrap() {
     {
       bufferLogs: true,
       cors: true,
+      httpsOptions,
     },
   );
   const configService = app.get(AppConfigService);
