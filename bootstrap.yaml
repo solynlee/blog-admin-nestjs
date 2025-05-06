@@ -30,7 +30,7 @@ db:
   host: 60.205.182.8
   port: 3306
   username: song
-  password: Song1990926.
+  password: Song19960926.
   database: blog_admin
   logging: true
 
