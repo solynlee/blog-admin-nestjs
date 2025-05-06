@@ -27,11 +27,11 @@ redis:
   db: 0
 
 db:
-  host: 127.0.0.1
+  host: 60.205.182.8
   port: 3306
-  username: root
-  password: root
-  database: book
+  username: song
+  password: Song1990926.
+  database: blog-admin
   logging: true
 
 swagger:
