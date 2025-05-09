@@ -17,6 +17,7 @@ import {
   UpdatePasswordDto,
   UpdateUserInfoDto,
 } from './user.dto';
+import { PageOptionsDto } from '@/dtos/page-options.dto';
 
 @Controller('user')
 export class UserController {
@@ -31,8 +32,8 @@ export class UserController {
   }
 
   @Get()
-  getUsers() {
-    return this.userService.findAll();
+  getUsers(@Query() query: PageOptionsDto) {
+    return this.userService.findAll(query.page, query.limit);
   }
   @Post()
   createUser(@Body() Body) {

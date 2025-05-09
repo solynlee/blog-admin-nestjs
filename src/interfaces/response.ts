@@ -19,19 +19,3 @@ export interface IPaginationInfo {
 export interface IPaginationRespData<T = any> extends IListRespData<T> {
   pagination: IPaginationInfo;
 }
-
-export class PaginatedResponse<T> {
-  data!: T[];
-
-  @Type(() => IPaginationInfo)
-  meta!: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-
-  toPlain(): PaginatedResponse<T> {
-    return plainToInstance(PaginatedResponse, this);
-  }
-}

@@ -13,6 +13,7 @@ import { ApiFailedException } from '@/exceptions/api-failed.exception';
 import { ErrorEnum } from '@/constants/errorx';
 import { isEmpty } from 'lodash';
 import * as md5 from 'md5';
+import { IPaginationRespData } from '@/interfaces/response';
 
 @Injectable()
 export class UserService {
@@ -23,8 +24,21 @@ export class UserService {
   findOne(id: number): Promise<UserEntity | null> {
     return this.userRepository.findOneBy({ id });
   }
-  findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
+  async findAll(page: number, limit: number) {
+    const [rows, count] = await this.userRepository.findAndCount({
+      select: ['id', 'username', 'nickname', 'avatar', 'roles', 'active'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      list: rows,
+      pag: {
+        page,
+        limit,
+        total: count,
+      },
+    };
   }
   createUser(userDto: UserDto): Promise<UserEntity> {
     const user = new UserEntity();
