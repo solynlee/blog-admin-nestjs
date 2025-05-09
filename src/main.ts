@@ -16,6 +16,7 @@ import {
 import { AppLoggerService } from './shared/services/app-logger.service';
 import { BaseExceptionFilter } from './filters/base.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { DateInterceptor } from './interceptors/moment.interceptor';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import { setupSwagger } from './setup-swagger';
@@ -34,7 +35,7 @@ async function bootstrap() {
     {
       bufferLogs: true,
       cors: true,
-      httpsOptions,
+      //httpsOptions,
     },
   );
   const configService = app.get(AppConfigService);
@@ -48,6 +49,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(reflector),
     new TransformInterceptor(reflector),
+    new DateInterceptor(),
   );
 
   const jwtService = app.select(SharedModule).get(JwtService);

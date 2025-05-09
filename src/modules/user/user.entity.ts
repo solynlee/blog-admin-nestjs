@@ -32,4 +32,12 @@ export class UserEntity {
   tags: string[];
   @Column()
   sex: number;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createTime: Date;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updateTime: Date;
 }
